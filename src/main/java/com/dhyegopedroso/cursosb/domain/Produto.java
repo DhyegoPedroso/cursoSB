@@ -1,11 +1,16 @@
 package com.dhyegopedroso.cursosb.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Produto implements Serializable {
@@ -18,6 +23,10 @@ public class Produto implements Serializable {
 	private String nome;
 	private Double preco;
 
+	@ManyToMany
+	@JoinTable(name = "PRODUTO_CATEGORIA", joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "categoria_id"))
+	private List<Categoria> categorias = new ArrayList<>();
+
 	public Produto() {
 		// TODO Auto-generated constructor stub
 	}
@@ -28,7 +37,7 @@ public class Produto implements Serializable {
 		this.nome = nome;
 		this.preco = preco;
 	}
-
+ 
 	public Integer getId() {
 		return id;
 	}
@@ -51,6 +60,14 @@ public class Produto implements Serializable {
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
 	}
 
 	@Override
