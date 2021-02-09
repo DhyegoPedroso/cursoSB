@@ -1,5 +1,6 @@
 package com.dhyegopedroso.cursosb;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.dhyegopedroso.cursosb.domain.Cidade;
 import com.dhyegopedroso.cursosb.domain.Cliente;
 import com.dhyegopedroso.cursosb.domain.Endereco;
 import com.dhyegopedroso.cursosb.domain.Estado;
+import com.dhyegopedroso.cursosb.domain.Pagamento;
+import com.dhyegopedroso.cursosb.domain.PagamentoComBoleto;
+import com.dhyegopedroso.cursosb.domain.PagamentoComCartao;
+import com.dhyegopedroso.cursosb.domain.Pedido;
 import com.dhyegopedroso.cursosb.domain.Produto;
+import com.dhyegopedroso.cursosb.domain.enums.EstadoPagamento;
 import com.dhyegopedroso.cursosb.domain.enums.TipoCliente;
 import com.dhyegopedroso.cursosb.repositories.CategoriaRepository;
 import com.dhyegopedroso.cursosb.repositories.CidadeRepository;
 import com.dhyegopedroso.cursosb.repositories.ClienteRepository;
 import com.dhyegopedroso.cursosb.repositories.EnderecoRepository;
 import com.dhyegopedroso.cursosb.repositories.EstadoRepository;
+import com.dhyegopedroso.cursosb.repositories.PagamentoRepository;
+import com.dhyegopedroso.cursosb.repositories.PedidoRepository;
 import com.dhyegopedroso.cursosb.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -42,12 +50,20 @@ public class CursosbApplication implements CommandLineRunner {
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 
+	@Autowired
+	private PedidoRepository pedidoRepository;
+
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(CursosbApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
@@ -96,6 +112,21 @@ public class CursosbApplication implements CommandLineRunner {
 
 		clienteRepository.saveAll(Arrays.asList(cli1));
 		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+
+		Pedido ped1 = new Pedido(null, sdf.parse("20/01/2021 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("01/02/2021 19:35"), cli1, e2);
+
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("28/02/2021 00:00"),
+				null);
+		ped2.setPagamento(pagto2);
+
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
 
 	}
 

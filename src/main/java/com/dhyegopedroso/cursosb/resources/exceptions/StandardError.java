@@ -1,4 +1,4 @@
-package com.dhyegopedroso.cursosb.resources.exception;
+package com.dhyegopedroso.cursosb.resources.exceptions;
 
 import java.io.Serializable;
 

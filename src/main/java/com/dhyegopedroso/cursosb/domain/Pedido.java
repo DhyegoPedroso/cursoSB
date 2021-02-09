@@ -3,10 +3,14 @@ package com.dhyegopedroso.cursosb.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Pedido implements Serializable {
@@ -18,14 +22,26 @@ public class Pedido implements Serializable {
 	private Integer Id;
 	private Date instante;
 
-	public Pedido(Integer id, Date instante) {
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
+	private Pagamento pagamento;
+
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
+
+	@ManyToOne
+	@JoinColumn(name = "endereco_de_entrega_id")
+	private Endereco enderecoDeEntrega;
+
+	public Pedido() {
+	}
+
+	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega) {
 		super();
 		Id = id;
 		this.instante = instante;
-	}
-
-	public Pedido() {
-		// TODO Auto-generated constructor stub
+		this.cliente = cliente;
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
 	public Integer getId() {
@@ -42,6 +58,30 @@ public class Pedido implements Serializable {
 
 	public void setInstante(Date instante) {
 		this.instante = instante;
+	}
+
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+
+	public Endereco getEnderecoDeEntrega() {
+		return enderecoDeEntrega;
+	}
+
+	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
 	@Override
