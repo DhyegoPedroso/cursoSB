@@ -23,7 +23,7 @@ import com.dhyegopedroso.cursosb.services.CategoriaService;
 
 @RestController
 @RequestMapping(value = "/categorias")
-public class CategoriasResource {
+public class CategoriaResource {
 
 	@Autowired
 	private CategoriaService service;
