@@ -12,11 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.dhyegopedroso.cursosb.domain.Cliente;
-import com.dhyegopedroso.cursosb.domain.enums.TipoCliente;
 import com.dhyegopedroso.cursosb.dto.ClienteDTO;
 import com.dhyegopedroso.cursosb.repositories.ClienteRepository;
 import com.dhyegopedroso.cursosb.resources.exceptions.FieldMessage;
-import com.dhyegopedroso.cursosb.services.validation.utils.BR;
 
 public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate, ClienteDTO> {
 
