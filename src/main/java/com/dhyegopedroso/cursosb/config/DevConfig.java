@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.dhyegopedroso.cursosb.services.DBService;
+import com.dhyegopedroso.cursosb.services.EmailService;
+import com.dhyegopedroso.cursosb.services.SmtpEmailService;
 
 @Configuration
 @Profile("dev")
@@ -22,15 +24,18 @@ public class DevConfig {
 
 	@Bean
 	public boolean instantiateDatabase() throws ParseException {
-
 		if (!"create".equalsIgnoreCase(strategy)) {
+
 			return false;
 		}
 
 		dbService.instantiateTestDatabase();
-
 		return true;
+	}
 
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 
 }
