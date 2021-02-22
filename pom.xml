@@ -20,9 +20,7 @@
 	<description>Workshop Spring Boot com MongoDB</description>
 
 	<properties>
-
 		<java.version>11</java.version>
-
 	</properties>
 
 	<dependencies>
@@ -79,6 +77,17 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.7.0</version>
 		</dependency>
 
 	</dependencies>
