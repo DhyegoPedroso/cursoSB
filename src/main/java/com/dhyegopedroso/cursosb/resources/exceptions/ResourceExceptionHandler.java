@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.dhyegopedroso.cursosb.services.exceptions.DataIntegrityException;
+import com.dhyegopedroso.cursosb.services.exceptions.NumberFormatException;
 import com.dhyegopedroso.cursosb.services.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
@@ -35,11 +36,17 @@ public class ResourceExceptionHandler {
 
 		ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Erro de validação",
 				System.currentTimeMillis());
-
 		for (FieldError x : e.getBindingResult().getFieldErrors()) {
 			err.addError(x.getField(), x.getDefaultMessage());
 		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+	}
 
+	@ExceptionHandler(NumberFormatException.class)
+	public ResponseEntity<StandardError> numberFormatException(NumberFormatException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
+				System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 }

@@ -20,6 +20,7 @@ import com.dhyegopedroso.cursosb.domain.PagamentoComCartao;
 import com.dhyegopedroso.cursosb.domain.Pedido;
 import com.dhyegopedroso.cursosb.domain.Produto;
 import com.dhyegopedroso.cursosb.domain.enums.EstadoPagamento;
+import com.dhyegopedroso.cursosb.domain.enums.Perfil;
 import com.dhyegopedroso.cursosb.domain.enums.TipoCliente;
 import com.dhyegopedroso.cursosb.repositories.CategoriaRepository;
 import com.dhyegopedroso.cursosb.repositories.CidadeRepository;
@@ -60,7 +61,7 @@ public class DBService {
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder pe;
 
@@ -132,18 +133,25 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2, est3));
 		cidadeRepository.saveAll(Arrays.asList(c1, c2, c3, c4, c5, c6));
 
-		Cliente cli1 = new Cliente(null, "Dhyego Pedroso", "dhyego.pedroso@gmail.com", "36378912377",
+		Cliente cli1 = new Cliente(null, "Dhyego Luiz Damasco Pedroso Admin", "dhyego.pedroso@gmail.com", "78390999048",
 				TipoCliente.PESSOAFISICA, pe.encode("Teste123"));
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+		cli1.addPerfil(Perfil.ADMIN);
+
+		Cliente cli2 = new Cliente(null, "Dhyego Pedroso Cliente", "dhyegodev@gmail.com", "72436347026",
+				TipoCliente.PESSOAFISICA, pe.encode("Teste123"));
+		cli2.getTelefones().addAll(Arrays.asList("30336251", "984555874"));
 
 		Endereco e1 = new Endereco(null, "Rua Mathias Schell", "132", "Cond. Bem-Ti-Vi AP403A", "Sertão do Maruim",
 				"88122400", cli1, c2);
 		Endereco e2 = new Endereco(null, "Rua Joaquim Carneiro", "460", "Casa", "Capoeiras", "38777012", cli1, c1);
+		Endereco e3 = new Endereco(null, "Avenida Brasil", "110", "Casa", "Estreito", "88122487", cli2, c1);
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		Pedido ped1 = new Pedido(null, sdf.parse("20/01/2021 10:32"), cli1, e1);
 		Pedido ped2 = new Pedido(null, sdf.parse("01/02/2021 19:35"), cli1, e2);
