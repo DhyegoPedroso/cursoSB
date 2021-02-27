@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.dhyegopedroso.cursosb.domain.Cidade;
 import com.dhyegopedroso.cursosb.domain.Cliente;
 import com.dhyegopedroso.cursosb.domain.Endereco;
+import com.dhyegopedroso.cursosb.domain.enums.Perfil;
 import com.dhyegopedroso.cursosb.domain.enums.TipoCliente;
 import com.dhyegopedroso.cursosb.dto.ClienteDTO;
 import com.dhyegopedroso.cursosb.dto.ClienteNewDTO;
 import com.dhyegopedroso.cursosb.repositories.ClienteRepository;
 import com.dhyegopedroso.cursosb.repositories.EnderecoRepository;
+import com.dhyegopedroso.cursosb.security.UserSS;
+import com.dhyegopedroso.cursosb.services.exceptions.AuthorizationException;
 import com.dhyegopedroso.cursosb.services.exceptions.DataIntegrityException;
 import com.dhyegopedroso.cursosb.services.exceptions.ObjectNotFoundException;
 
@@ -36,6 +39,12 @@ public class ClienteService {
 	private BCryptPasswordEncoder pe;
 
 	public Cliente find(Integer id) {
+
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado");
+		}
+
 		Optional<Cliente> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));

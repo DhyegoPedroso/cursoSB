@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.dhyegopedroso.cursosb.services.exceptions.AuthorizationException;
 import com.dhyegopedroso.cursosb.services.exceptions.DataIntegrityException;
 import com.dhyegopedroso.cursosb.services.exceptions.NumberFormatException;
 import com.dhyegopedroso.cursosb.services.exceptions.ObjectNotFoundException;
@@ -43,10 +44,17 @@ public class ResourceExceptionHandler {
 	}
 
 	@ExceptionHandler(NumberFormatException.class)
-	public ResponseEntity<StandardError> numberFormatException(NumberFormatException e, HttpServletRequest request) {
+	public ResponseEntity<StandardError> numberFormat(NumberFormatException e, HttpServletRequest request) {
 
-		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(),
+		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(),
 				System.currentTimeMillis());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+	}
+
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
 	}
 }
